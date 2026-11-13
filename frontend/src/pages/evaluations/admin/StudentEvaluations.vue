@@ -94,7 +94,7 @@ import { Line } from 'vue-chartjs'
 const { studentId } = defineProps(['studentId'])
 const settingsStore = useSettingsStore()
 const studentSectionId = settingsStore.defaultSectionId
-const peerEvalutionAverages = ref<PeerEvaluationAverage[]>()
+const peerEvalutionAverages = ref<PeerEvaluationAverage[]>([]) // Empty until loaded, so the chart always gets arrays
 const criteria = ref<Criterion[]>([]) // Criteria used for peer evaluations
 const loading = ref<boolean>(true)
 const period = ref<PeriodParams>({
@@ -142,8 +142,8 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 // Computed properties for chart data and options
 const evaluationData = computed(() => {
-  const weeks = peerEvalutionAverages.value?.map((evaluation) => evaluation.week)
-  const evaluationAvgTotalScores = peerEvalutionAverages.value?.map(
+  const weeks = peerEvalutionAverages.value.map((evaluation) => evaluation.week)
+  const evaluationAvgTotalScores = peerEvalutionAverages.value.map(
     (evaluation) => evaluation.averageTotalScore
   )
   return {
