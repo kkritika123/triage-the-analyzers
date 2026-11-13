@@ -130,7 +130,7 @@ const router = useRouter()
 const ready = ref(false) // State to track if validation is complete
 
 onMounted(async () => {
-  const link = parseRegistrationLink(route.query as Record<string, string>)
+  const link = parseRegistrationLink(route.query)
 
   if (!link) {
     ElMessage.error('Invalid registration link')
