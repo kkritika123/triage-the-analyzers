@@ -51,6 +51,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { parseRegistrationLink } from '@/utils/registrationLink'
 import { createStudent } from '@/apis/student'
 import { createInstructor } from '@/apis/instructor'
 import { checkEmailExists } from '@/apis/user'
@@ -129,9 +130,9 @@ const router = useRouter()
 const ready = ref(false) // State to track if validation is complete
 
 onMounted(async () => {
-  const { email, token, courseId, sectionId, role } = route.query as Record<string, string> // Destructure query parameters
+  const link = parseRegistrationLink(route.query as Record<string, string>)
 
-  if (!email || !token || !role) {
+  if (!link) {
     ElMessage.error('Invalid registration link')
     // redirect to 403
     router.replace('/403')
@@ -139,6 +140,7 @@ onMounted(async () => {
   }
 
   // Check if this email is already registered
+  const { email, token, courseId, sectionId, role } = link
   const response: CheckEmailExistsResponse = await checkEmailExists(email)
 
   const isEmailRegistered = response.data
@@ -153,8 +155,8 @@ onMounted(async () => {
   registration.value.email = email
   registration.value.username = email
   registrationToken.value = token
-  registrationCourseId.value = parseInt(courseId)
-  registrationSectionId.value = parseInt(sectionId)
+  registrationCourseId.value = courseId
+  registrationSectionId.value = sectionId
   registrationRole.value = role
 
   ready.value = true // show the form only after all checks pass
