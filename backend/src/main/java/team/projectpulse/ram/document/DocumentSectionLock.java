@@ -33,6 +33,7 @@ public class DocumentSectionLock {
 
 
     public DocumentSectionLock() {
+        // Required by JPA: Hibernate instantiates the entity through its no-arg constructor.
     }
 
     public boolean isLocked(Instant now) {

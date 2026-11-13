@@ -13,5 +13,12 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
     <description>PMD quickstart, with Project Pulse's decisions.</description>
     <rule ref="rulesets/java/quickstart.xml">
+        <!-- D2 (2026-11-13): UnnecessaryConstructor is off. Every finding is an explicit no-arg
+             constructor that is the class's only one: JPA entities (Hibernate needs it) and the two
+             evaluation reports that EvaluationService builds with new X() and setters. Deleting it
+             makes the constructor implicit, and the first person to add another constructor then
+             silently removes it, which breaks entity loading at runtime instead of at compile time.
+             UncommentedEmptyConstructor stays on, so each of these constructors says why it exists. -->
+        <exclude name="UnnecessaryConstructor"/>
     </rule>
 </ruleset>
