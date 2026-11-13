@@ -7,4 +7,21 @@
 
      Unlike the baseline, this file may grow, but every entry is a reviewed decision. -->
 <FindBugsFilter>
+  <!-- D1 (2026-11-13): EI_EXPOSE_REP and EI_EXPOSE_REP2 are narrowed: off everywhere except
+       team.projectpulse.ram.document.template. Of the 219 findings, the flagged classes are
+       (a) JPA entities, which must hand out and accept their live associations and collections,
+           because a defensive copy replaces the collection Hibernate tracks (dirty checking,
+           orphanRemoval, lazy loading);
+       (b) Spring beans (@RestController, @Service, @Component) whose constructor stores an injected
+           singleton, which is the point of dependency injection;
+       (c) per-request DTO records and report objects (PeerEvaluationAverage,
+           WeeklyPeerEvaluationReport), built by one service call and serialized straight to JSON, and
+           MyUserPrincipal, which wraps the authenticated user entity for Spring Security.
+       None of these outlives the request that built it or is shared between callers. The template
+       package is the exception: DocumentTemplateRegistry loads each template once and hands the
+       same object to every request, so there the rule is enforced and DocumentTemplate copies. -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    <Not><Package name="team.projectpulse.ram.document.template"/></Not>
+  </Match>
 </FindBugsFilter>

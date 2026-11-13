@@ -17,6 +17,7 @@ public class PeerEvaluationAverage {
 
 
     public PeerEvaluationAverage() {
+        // Built empty, then filled through setters by EvaluationService.
     }
 
     public Integer getStudentId() {
