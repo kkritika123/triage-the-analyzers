@@ -211,10 +211,8 @@ async function loadActivities() {
   // Group activities by teamId
   const activitiesGroupedByTeamId = activities.value.reduce(
     (team, activity) => {
-      if (!team[activity.teamId!]) {
-        team[activity.teamId!] = []
-      }
-      team[activity.teamId!].push(activity)
+      // Same behavior as an if-undefined-then-create block, but in one expression, so TypeScript can see the array exists
+      ;(team[activity.teamId!] ??= []).push(activity)
       return team
     },
     {} as Record<number, Activity[]>
