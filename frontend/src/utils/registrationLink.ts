@@ -28,7 +28,13 @@ export function parseRegistrationLink(query: Record<string, unknown>): Registrat
   const courseId = wholeNumber(query.courseId)
   const sectionId = wholeNumber(query.sectionId)
 
-  if (email === null || token === null || role === null || courseId === null || sectionId === null) {
+  if (
+    email === null ||
+    token === null ||
+    role === null ||
+    courseId === null ||
+    sectionId === null
+  ) {
     return null
   }
 
